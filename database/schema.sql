@@ -1,5 +1,3 @@
-
-
 CREATE TABLE IF NOT EXISTS alunos (
     id        INTEGER PRIMARY KEY AUTOINCREMENT,
     nome      TEXT    NOT NULL,
@@ -10,5 +8,19 @@ CREATE TABLE IF NOT EXISTS alunos (
     situacao  TEXT    DEFAULT 'Cursando' CHECK (situacao IN ('Cursando', 'Aprovado', 'Reprovado'))
 );
 
--- Índice para buscas por série/turma (operação mais frequente)
+CREATE TABLE IF NOT EXISTS professores (
+    id        INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome      TEXT    NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS professor_turma (
+    professor_id INTEGER NOT NULL,
+    serie        INTEGER NOT NULL CHECK (serie IN (1, 2, 3)),
+    turma        TEXT    NOT NULL CHECK (turma IN ('A', 'B')),
+    PRIMARY KEY (professor_id, serie, turma),
+    FOREIGN KEY (professor_id) REFERENCES professores(id) ON DELETE CASCADE
+);
+
+-- Índices para buscas frequentes
 CREATE INDEX IF NOT EXISTS idx_alunos_serie_turma ON alunos (serie, turma);
+CREATE INDEX IF NOT EXISTS idx_prof_turma_busca ON professor_turma (serie, turma);
