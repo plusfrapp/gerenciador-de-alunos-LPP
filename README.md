@@ -79,6 +79,5 @@ Executar o ficheiro principal:
 Bash
 
 
-python main.py
+python3 main.py
 
-Desenvolvido com dedicação para facilitar a gestão do ambiente escolar.
