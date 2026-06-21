@@ -1,6 +1,4 @@
-# Sistema de Gerenciamento de Alunos (Microaplicação CLI)
-
-**Disciplina:** Linguagens e Paradigmas da Programação (LPP)  
+## Sistema de Gestão Escolar (CLI)
 
 **Integrantes:**
 * Felipe Gonçalves Vidal

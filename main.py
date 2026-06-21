@@ -1,20 +1,23 @@
 import time
+import logging
 from database.conexao import inicializar_banco, fechar_conexao
 from repository import aluno_repo, professor_repo
 
-# ── CONSTANTES ──────────────────────────────────────────────────────────────
+logger = logging.getLogger(__name__)
+
+# Constantes do sistema
 
 SERIES = [1, 2, 3]
 TURMAS = ['A', 'B']
 
-# ── UTILITÁRIOS DE INPUT ─────────────────────────────────────────────────────
+# Funções auxiliares para entrada de dados
 
 def pedir_texto(mensagem: str) -> str:
     while True:
         v = input(mensagem).strip()
         if v:
             return v
-        print("  ❌ Campo obrigatório, não pode ser vazio.")
+        logger.error("  ❌ Campo obrigatório, não pode ser vazio.")
 
 def pedir_int(mensagem: str, opcoes: list[int]) -> int:
     while True:
@@ -22,9 +25,9 @@ def pedir_int(mensagem: str, opcoes: list[int]) -> int:
             v = int(input(mensagem))
             if v in opcoes:
                 return v
-            print(f"  ❌ Digite uma das opções: {opcoes}")
+            logger.error(f"  ❌ Digite uma das opções: {opcoes}")
         except ValueError:
-            print("  ❌ Digite um número inteiro válido.")
+            logger.error("  ❌ Digite um número inteiro válido.")
 
 def pedir_id(mensagem: str) -> int:
     while True:
@@ -32,9 +35,9 @@ def pedir_id(mensagem: str) -> int:
             v = int(input(mensagem))
             if v > 0:
                 return v
-            print("  ❌ ID deve ser maior que zero.")
+            logger.error("  ❌ ID deve ser maior que zero.")
         except ValueError:
-            print("  ❌ Digite um número inteiro válido.")
+            logger.error("  ❌ Digite um número inteiro válido.")
 
 def pedir_nota(mensagem: str) -> float:
     while True:
@@ -42,28 +45,28 @@ def pedir_nota(mensagem: str) -> float:
             v = float(input(mensagem))
             if 0.0 <= v <= 10.0:
                 return v
-            print("  ❌ Nota deve estar entre 0.0 e 10.0.")
+            logger.error("  ❌ Nota deve estar entre 0.0 e 10.0.")
         except ValueError:
-            print("  ❌ Digite um número válido.")
+            logger.error("  ❌ Digite um número válido.")
 
 def pedir_turma(mensagem: str) -> str:
     while True:
         v = input(mensagem).strip().upper()
         if v in TURMAS:
             return v
-        print(f"  ❌ Turma inválida. Digite A ou B.")
+        logger.error(f"  ❌ Turma inválida. Digite A ou B.")
 
 def separador(char='─', largura=50):
     print(f"  {char * largura}")
 
-# ── SELEÇÃO DE SÉRIE/TURMA ───────────────────────────────────────────────────
+# Seleção de série e turma
 
 def selecionar_serie_turma() -> tuple[int, str]:
     serie = pedir_int("  Série (1, 2 ou 3): ", SERIES)
     turma = pedir_turma("  Turma (A ou B): ")
     return serie, turma
 
-# ── MENUS ────────────────────────────────────────────────────────────────────
+# Menus do sistema
 
 def menu_principal() -> str:
     print("\n" + "=" * 52)
@@ -111,7 +114,7 @@ def submenu_relatorios() -> str:
     print("─" * 36)
     return input("  Opção: ").strip()
 
-# ── FLUXOS ───────────────────────────────────────────────────────────────────
+# Lógica principal e fluxos das telas
 
 def fluxo_alunos():
     while True:
@@ -145,7 +148,7 @@ def fluxo_alunos():
         elif op == '0':
             break
         else:
-            print("  ❌ Opção inválida.")
+            logger.error("  ❌ Opção inválida.")
 
 def fluxo_professores():
     while True:
@@ -197,7 +200,7 @@ def fluxo_professores():
         elif op == '0':
             break
         else:
-            print("  ❌ Opção inválida.")
+            logger.error("  ❌ Opção inválida.")
 
 def fluxo_notas():
     print("\n  ── Lançar Notas ──")
@@ -256,9 +259,9 @@ def fluxo_relatorios():
         elif op == '0':
             break
         else:
-            print("  ❌ Opção inválida.")
+            logger.error("  ❌ Opção inválida.")
 
-# ── EXIBIÇÃO ─────────────────────────────────────────────────────────────────
+# Funções de exibição e formatação
 
 def _imprimir_lista_simples(alunos: list, serie: int, turma: str):
     separador()
@@ -311,7 +314,7 @@ def _imprimir_relatorio_notas(alunos: list, serie: int, turma: str, contagem: di
         print("  ℹ️  Nenhum aluno cadastrado nesta turma.")
     separador('═')
 
-# ── MAIN ─────────────────────────────────────────────────────────────────────
+# Ponto de entrada do programa
 
 def main():
     inicializar_banco()
@@ -334,7 +337,7 @@ def main():
                 print("  👋 Sistema encerrado. Até logo!")
                 break
             else:
-                print("  ❌ Opção inválida.")
+                logger.error("  ❌ Opção inválida.")
     finally:
         fechar_conexao()
 

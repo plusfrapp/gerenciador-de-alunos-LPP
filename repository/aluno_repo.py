@@ -1,9 +1,12 @@
 import sqlite3
+import logging
 from database.conexao import conectar
+
+logger = logging.getLogger(__name__)
 
 MAX_ALUNOS_POR_TURMA = 30
 
-# ── HELPERS ─────────────────────────────────────────────────────────────────
+# Funções auxiliares
 
 def _calcular_situacao(p1, p2) -> str:
     """Calcula situação com base nas duas notas. Só finaliza se ambas existirem."""
@@ -19,7 +22,7 @@ def _contar_alunos(serie: int, turma: str) -> int:
     ).fetchone()
     return row[0]
 
-# ── CRUD ────────────────────────────────────────────────────────────────────
+# Operações de inserção, atualização e remoção
 
 def adicionar_aluno(nome: str, serie: int, turma: str) -> tuple[bool, str]:
     """Adiciona aluno na turma, respeitando o limite de 30."""
@@ -74,7 +77,7 @@ def lancar_notas(aluno_id: int, p1: float, p2: float) -> tuple[bool, str]:
         conn.rollback()
         return False, f"Erro ao lançar notas: {e}"
 
-# ── CONSULTAS ───────────────────────────────────────────────────────────────
+# Consultas e relatórios
 
 def listar_por_turma(serie: int, turma: str) -> list:
     """Lista todos os alunos de uma turma, ordenados por nome."""

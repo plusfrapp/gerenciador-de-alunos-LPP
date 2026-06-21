@@ -1,5 +1,8 @@
 import sqlite3
+import logging
 from database.conexao import conectar
+
+logger = logging.getLogger(__name__)
 
 def adicionar_professor(nome: str) -> tuple[bool, str]:
     conn = conectar()

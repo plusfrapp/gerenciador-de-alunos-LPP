@@ -1,6 +1,9 @@
 import sqlite3
 import os
 import threading
+import logging
+
+logger = logging.getLogger(__name__)
 
 _PASTA_DATABASE = os.path.dirname(os.path.abspath(__file__))
 _RAIZ_PROJETO   = os.path.dirname(_PASTA_DATABASE)
@@ -37,12 +40,12 @@ def inicializar_banco():
 
     total = conn.execute("SELECT COUNT(*) FROM alunos").fetchone()[0]
     if total == 0:
-        print("  📦 Banco vazio. Carregando dados iniciais...")
+        logger.info("  📦 Banco vazio. Carregando dados iniciais...")
         _popular_banco(conn)
         total = conn.execute("SELECT COUNT(*) FROM alunos").fetchone()[0]
-        print(f"  ✅ {total} alunos carregados com sucesso!")
+        logger.info(f"  ✅ {total} alunos carregados com sucesso!")
     else:
-        print(f"  ✅ Banco carregado — {total} aluno(s) cadastrado(s).")
+        logger.info(f"  ✅ Banco carregado — {total} aluno(s) cadastrado(s).")
 
 def _popular_banco(conn: sqlite3.Connection):
     PROFESSORES = [
